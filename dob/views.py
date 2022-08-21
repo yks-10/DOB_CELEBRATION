@@ -1,8 +1,8 @@
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render, redirect
 from rest_framework.views import APIView
-from .models import Wishes
-from .serializer import CommonSerializer, UserSerializer
+from .models import Wishes, Memories, SongDedication
+from .serializer import CommonSerializer, MemoriesSerializer
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
@@ -10,6 +10,7 @@ from rest_framework.response import Response
 # Create your views here.
 class LoginView(APIView):
     permission_classes = [AllowAny]
+
     def post(self, request):
         try:
             data =  request.data
@@ -32,6 +33,15 @@ class WishesView(APIView):
         user = request.user
         values = Wishes.objects.filter(user=user)
         serializer = CommonSerializer(values, many=True)
+        return Response(serializer.data)
+
+class MemoriesView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        user = request.user
+        values = Memories.objects.filter(user=user)
+        serializer = MemoriesSerializer(values, many=True)
         return Response(serializer.data)
 
 
