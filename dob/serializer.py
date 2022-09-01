@@ -1,4 +1,4 @@
-from .models import Wishes, Memories
+from .models import Wishes, SongDedication, Memories
 from django.contrib.auth.models import User
 from rest_framework import serializers
 
@@ -13,6 +13,10 @@ class CommonSerializer(serializers.ModelSerializer):
         model = Wishes
         fields = "__all__"
 
+class SongSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SongDedication
+        fields = "__all__"
 class MemoriesSerializer(serializers.ModelSerializer):
     class Meta:
         model = Memories

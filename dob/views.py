@@ -1,8 +1,8 @@
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render, redirect
 from rest_framework.views import APIView
-from .models import Wishes, Memories, SongDedication
-from .serializer import CommonSerializer, MemoriesSerializer
+from .models import Wishes,  SongDedication, Memories
+from .serializer import CommonSerializer, SongSerializer, MemoriesSerializer
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
@@ -33,7 +33,16 @@ class WishesView(APIView):
         user = request.user
         values = Wishes.objects.filter(user=user)
         serializer = CommonSerializer(values, many=True)
-        return Response(serializer.data)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+class SongView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        user = request.user
+        values = SongDedication.objects.filter(user=user)
+        serializer = SongSerializer(values, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 class MemoriesView(APIView):
     permission_classes = [IsAuthenticated]
@@ -42,7 +51,7 @@ class MemoriesView(APIView):
         user = request.user
         values = Memories.objects.filter(user=user)
         serializer = MemoriesSerializer(values, many=True)
-        return Response(serializer.data)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 
